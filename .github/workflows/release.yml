@@ -100,6 +100,35 @@ jobs:
           name: windows-zip
           path: target/release/volta-windows.zip
 
+  windows-arm:
+    name: Build - Windows ARM
+    runs-on: windows-latest
+    steps:
+      - name: Check out code
+        uses: actions/checkout@v4
+      - name: Set up cargo
+        uses: actions-rust-lang/setup-rust-toolchain@v1
+        with:
+          target: aarch64-pc-windows-msvc
+      - name: Add cargo-wix subcommand
+        run: cargo install cargo-wix
+      - name: Compile and package installer
+        run: |
+          cargo wix --nocapture --package volta --output target\wix\volta-windows-arm.msi
+      - name: Create zip of binaries
+        run: powershell Compress-Archive volta*.exe volta-windows-arm.zip
+        working-directory: ./target/release
+      - name: Upload installer
+        uses: actions/upload-artifact@v4
+        with:
+          name: windows-installer-arm
+          path: target/wix/volta-windows-arm.msi
+      - name: Upload zip
+        uses: actions/upload-artifact@v4
+        with:
+          name: windows-zip-arm
+          path: target/release/volta-windows-arm.zip
+
   release:
     name: Publish release
     runs-on: ubuntu-latest
