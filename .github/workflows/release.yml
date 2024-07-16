@@ -108,13 +108,11 @@ jobs:
         uses: actions/checkout@v4
       - name: Set up cargo
         uses: actions-rust-lang/setup-rust-toolchain@v1
-        with:
-          target: aarch64-pc-windows-msvc
       - name: Add cargo-wix subcommand
         run: cargo install cargo-wix
       - name: Compile and package installer
         run: |
-          cargo wix --nocapture --package volta --output target\wix\volta-windows-arm.msi
+          cargo wix --nocapture --package volta --target aarch64-pc-windows-msvc --output target\wix\volta-windows-arm.msi
       - name: Create zip of binaries
         run: powershell Compress-Archive volta*.exe volta-windows-arm.zip
         working-directory: ./target/release
