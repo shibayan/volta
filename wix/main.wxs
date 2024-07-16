@@ -191,9 +191,11 @@
             <ComponentGroupRef Id='Binaries'/>
         </Feature>
 
+        <?if $(sys.BUILDARCH) = x64 ?>
         <Feature Id='VCRedistributable' Title='Visual C++ Runtime' AllowAdvertise='no' Display='hidden' Level='1'>
             <MergeRef Id='VCRedist'/>
         </Feature>
+        <?endif ?>
 
         <SetProperty Id='ARPINSTALLLOCATION' Value='[APPLICATIONFOLDER]' After='CostFinalize'/>
 
