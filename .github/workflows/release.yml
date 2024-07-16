@@ -172,6 +172,16 @@ jobs:
         with:
           name: windows-zip
           path: release
+      - name: Fetch Windows ARM installer
+        uses: actions/download-artifact@v2
+        with:
+          name: windows-installer-arm
+          path: release
+      - name: Fetch Windows ARM zip
+        uses: actions/download-artifact@v2
+        with:
+          name: windows-zip-arm
+          path: release
       - name: Show release artifacts
         run: ls -la release
       - name: Create draft release
@@ -227,6 +237,24 @@ jobs:
           upload_url: ${{ steps.create_release.outputs.upload_url }}
           asset_path: ./release/volta-windows.zip
           asset_name: volta-${{ steps.release_info.outputs.version }}-windows.zip
+          asset_content_type: application/zip
+      - name: Upload Windows ARM installer
+        uses: actions/upload-release-asset@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          upload_url: ${{ steps.create_release.outputs.upload_url }}
+          asset_path: ./release/volta-windows-arm.msi
+          asset_name: volta-${{ steps.release_info.outputs.version }}-windows-arm64.msi
+          asset_content_type: application/x-msi
+      - name: Upload Windows ARM zip
+        uses: actions/upload-release-asset@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          upload_url: ${{ steps.create_release.outputs.upload_url }}
+          asset_path: ./release/volta-windows-arm.zip
+          asset_name: volta-${{ steps.release_info.outputs.version }}-windows-arm64.zip
           asset_content_type: application/zip
       - name: Upload manifest file
         uses: actions/upload-release-asset@v1
